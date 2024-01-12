@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7071301441350655,
+      "y": 6.990384785778517
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ScorePiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PickUpGamePiece1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GamePiece1ToAmplifier"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

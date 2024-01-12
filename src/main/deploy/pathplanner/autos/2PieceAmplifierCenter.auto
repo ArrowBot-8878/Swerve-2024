@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ScorePiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PickUpGamePiece1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GamePiece1ToAmplifier"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AmplifierToCenter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
