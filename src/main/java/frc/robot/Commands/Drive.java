@@ -14,12 +14,12 @@ import frc.robot.subsystems.DriveSubsystem;
 public class Drive extends Command {
   /** Creates a new Drive. */
   public final DriveSubsystem m_DriveSubsystem;
-  Supplier m_xVelocitySupplier;
-  Supplier m_yVelcoitySupplier;
-  Supplier m_rotationalVelocitySupplier;
+  Supplier<Double> m_xVelocitySupplier;
+  Supplier<Double> m_yVelcoitySupplier;
+  Supplier<Double> m_rotationalVelocitySupplier;
   
 
-  public Drive(DriveSubsystem driveSubsystem, Supplier xVelocitySupplier, Supplier yVelocitySupplier, Supplier rotationalVelocitySupplier) {
+  public Drive(DriveSubsystem driveSubsystem, Supplier<Double> xVelocitySupplier, Supplier<Double> yVelocitySupplier, Supplier<Double> rotationalVelocitySupplier) {
     m_xVelocitySupplier = xVelocitySupplier;
     m_yVelcoitySupplier = yVelocitySupplier;
     m_rotationalVelocitySupplier = rotationalVelocitySupplier;

@@ -117,6 +117,19 @@ public final class Constants {
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
+  public static final class ArmConstants {
+    public static final int kLeftArmMotor = 20;
+    public static final int kRightArmMotor = 21;
+    public static final double kP = 0.5;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kWeight = 1;
+    public static final int kMaxAmps = 40;
+    public static final double angleTolerance = 2;
+
+    
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.15;
@@ -141,5 +154,6 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+    public static final int LeftArmMotor = 0;
   }
 }
