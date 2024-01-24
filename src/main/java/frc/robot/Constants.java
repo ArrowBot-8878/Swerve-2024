@@ -130,6 +130,19 @@ public final class Constants {
     
   }
 
+  
+  public static final class PlainShooterConstants {
+  public static final int kShooterMotor = 30;
+  public static final int kScalingFactor = 1;
+
+  }
+
+  public static final class ShooterConstants {
+  public static final int kShooterMotor = 30;
+  }
+
+    
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.15;
