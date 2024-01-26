@@ -37,7 +37,7 @@ public class Arm extends PIDSubsystem {
   @Override
   public void useOutput(double PIDOutput, double setpoint) {
     // Use the output here
-    double feedForward = ArmConstants.kWeight * Math.sin(getMeasurement()); 
+    double feedForward = ArmConstants.kHoldPosition * Math.cos(getMeasurement()); 
     double motorOutput = feedForward + PIDOutput;
     m_LeftArmMotor.set(motorOutput);
     m_RightArmMotor.set(motorOutput);

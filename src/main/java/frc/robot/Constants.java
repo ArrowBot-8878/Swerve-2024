@@ -123,28 +123,35 @@ public final class Constants {
     public static final double kP = 0.5;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kWeight = 1;
+    public static final double kHoldPosition = 1;
     public static final int kMaxAmps = 40;
     public static final double angleTolerance = 2;
 
     
   }
 
-  
-  public static final class PlainShooterConstants {
-  public static final int kShooterMotor = 30;
-  public static final int kScalingFactor = 1;
 
+
+  public static final class IntakeConstants{
+    public static final int kIntakeMotorCANID = 50;
+    public static final double kIntakeScalingFactor = 0.6;
+    public static final boolean invertIntake = false;
   }
 
-  public static final class ShooterConstants {
-  public static final int kShooterMotor = 30;
+
+  public static final class ShooterConstants{
+    
+  public static final int kTopMotorCAN = 40;
+  public static final int kBottomMotorCAN = 41;
+  public static final double kMotorOutputScaling = 0.6;
+  public static final boolean isInverted = false;
   }
 
     
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.15;
   }
 

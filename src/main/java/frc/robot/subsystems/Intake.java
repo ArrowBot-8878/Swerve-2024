@@ -4,11 +4,28 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
-  public Intake() {}
+  /** Creates a new Shooter. */
+  private final CANSparkMax m_intakeMotor;
+  public Intake() {
+    m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
+
+    
+  }
+
+  public void setOutSpeeds(double relativeSpeed){
+    if (IntakeConstants.invertIntake) {
+      relativeSpeed *= -1;
+    }
+    m_intakeMotor.set(relativeSpeed);
+  }
 
   @Override
   public void periodic() {

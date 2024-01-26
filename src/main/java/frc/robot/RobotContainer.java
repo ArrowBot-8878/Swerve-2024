@@ -17,15 +17,18 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Commands.Drive;
+import frc.robot.Commands.IntakeConsume;
+import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
-import frc.robot.Commands.PlainShooter.PlainShooterFire;
+import frc.robot.Commands.ArmControl.OpenLoopArm;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autos;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.PlainShooter;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -47,8 +50,10 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  PlainShooter m_PlainShooter = new PlainShooter();
-  // Arm m_Arm = new Arm();
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  Arm m_Arm = new Arm();
+  Shooter m_Shooter = new Shooter();
+  Intake m_Intake = new Intake();
   
 
 
@@ -72,10 +77,16 @@ public class RobotContainer {
         ()-> -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband), 
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)));
+      
+    m_Arm.setDefaultCommand(new OpenLoopArm(m_Arm,  ()-> -MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kDriveDeadband)));
+
+    new Trigger(()-> m_operatorController.getRightTriggerAxis() > 0).onTrue(new ShooterEject(m_Shooter));
+    new Trigger(()-> m_operatorController.getLeftTriggerAxis() > 0).onTrue(new IntakeConsume(m_Intake));
+    
 
     //TODO: comment out if not using the plain shooter mechanism
-    new Trigger(()-> m_driverController.getRightTriggerAxis() > 0)
-                .onTrue(new PlainShooterFire(m_PlainShooter, m_driverController::getRightTriggerAxis));
+    // new Trigger(()-> m_driverController.getRightTriggerAxis() > 0)
+    //             .onTrue(new PlainShooterFire(m_PlainShooter, m_driverController::getRightTriggerAxis));
 
 
 
