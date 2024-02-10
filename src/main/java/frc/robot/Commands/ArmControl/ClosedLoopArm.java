@@ -34,6 +34,7 @@ public class ClosedLoopArm extends Command {
   @Override
   public void end(boolean interrupted) {
     m_Arm.disable();
+    m_Arm.setMotorOutputs(0);
   }
 
   // Returns true when the command should end.
