@@ -42,7 +42,7 @@ public class Arm extends PIDSubsystem {
     if(m_AbsoluteEncoder.getPosition() < 90) {
       double feedForward = ArmConstants.kHoldPosition * Math.cos(getMeasurement()); 
       double motorOutput = feedForward + PIDOutput;
-      if(ArmConstants.kIsMovingForwardActuallyMovingBack){
+      if(ArmConstants.kIsPidInverted){
         m_LeftArmMotor.set(-motorOutput);
         m_RightArmMotor.set(motorOutput);
       } else{
@@ -60,8 +60,13 @@ public class Arm extends PIDSubsystem {
   }
 
   public void setMotorOutputs(double output){
-    m_LeftArmMotor.set(output);
-    m_RightArmMotor.set(output);
+      if(ArmConstants.kIsMovingForwardActuallyMovingBack){
+        m_LeftArmMotor.set(-output);
+        m_RightArmMotor.set(output);
+      } else{
+        m_LeftArmMotor.set(output);
+        m_RightArmMotor.set(-output);
+      }
   }
 
 }
