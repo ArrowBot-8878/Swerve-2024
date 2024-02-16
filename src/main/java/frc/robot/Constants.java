@@ -126,6 +126,7 @@ public final class Constants {
     public static final double kHoldPosition = 1;
     public static final int kMaxAmps = 40;
     public static final double angleTolerance = 2;
+    public static final boolean kIsMovingForwardActuallyMovingBack = false;
 
     
   }

@@ -17,14 +17,13 @@ public class OpenLoopArm extends Command {
     m_OutputSupplier = outputSupplier;
     m_Arm = arm;
     addRequirements(m_Arm);
-    m_Arm.disable();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Arm.enable();
+    m_Arm.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

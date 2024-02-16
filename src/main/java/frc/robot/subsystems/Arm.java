@@ -42,8 +42,13 @@ public class Arm extends PIDSubsystem {
     if(m_AbsoluteEncoder.getPosition() < 90) {
       double feedForward = ArmConstants.kHoldPosition * Math.cos(getMeasurement()); 
       double motorOutput = feedForward + PIDOutput;
-      m_LeftArmMotor.set(motorOutput);
-      m_RightArmMotor.set(motorOutput);
+      if(ArmConstants.kIsMovingForwardActuallyMovingBack){
+        m_LeftArmMotor.set(-motorOutput);
+        m_RightArmMotor.set(motorOutput);
+      } else{
+        m_LeftArmMotor.set(motorOutput);
+        m_RightArmMotor.set(-motorOutput);
+      }
     }
 
   }
