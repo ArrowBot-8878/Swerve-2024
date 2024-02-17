@@ -26,7 +26,7 @@ public class ShooterDump extends Command {
   @Override
   public void execute() 
   {
-    m_intake.setOutSpeeds(ShooterConstants.kMotorOutputScaling);
+    m_intake.setOutSpeeds(-ShooterConstants.kMotorOutputScaling);
   }
 
   // Called once the command ends or is interrupted.
