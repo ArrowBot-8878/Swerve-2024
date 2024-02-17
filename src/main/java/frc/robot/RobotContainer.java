@@ -81,10 +81,10 @@ public class RobotContainer {
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)));
 
     new Trigger(()-> m_operatorController.getRawAxis(1) > 0.05 || m_operatorController.getRawAxis(0) < -0.05).onTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRawAxis(0)));
-    new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new IntakeConsume(m_Intake));
-    new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeEject(m_Intake));
-    new Trigger(()-> m_operatorController.getRawButton(6)).whileTrue(new ShooterEject(m_Shooter));
-    new Trigger(()-> m_operatorController.getRawButton(7)).whileTrue(new ShooterDump(m_Shooter));
+    new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeConsume(m_Intake));
+    new Trigger(()-> m_operatorController.getRawButton(2)).whileTrue(new IntakeEject(m_Intake));
+    new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new ShooterEject(m_Shooter));
+    new Trigger(()-> m_operatorController.getRawButton(4)).whileTrue(new ShooterDump(m_Shooter));
 
     
 
