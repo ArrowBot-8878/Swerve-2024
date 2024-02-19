@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
 
   public void setOutSpeeds(double relativeSpeed){
     double topOutput = relativeSpeed;
-    double bottomOutput = relativeSpeed * -1;
+    double bottomOutput = relativeSpeed;
 
     if (ShooterConstants.isInverted){
       topOutput *= -1;

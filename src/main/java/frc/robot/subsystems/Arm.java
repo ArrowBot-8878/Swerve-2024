@@ -30,6 +30,8 @@ public class Arm extends PIDSubsystem {
     m_RightArmMotor = new CANSparkMax(ArmConstants.kRightArmMotor, CANSparkLowLevel.MotorType.kBrushless);
     m_LeftArmMotor.setSmartCurrentLimit(ArmConstants.kMaxAmps);
     m_AbsoluteEncoder = m_RightArmMotor.getAbsoluteEncoder(Type.kDutyCycle);  
+    m_AbsoluteEncoder.setPositionConversionFactor(360);
+    
     super.m_controller.setTolerance(ArmConstants.angleTolerance);
     
   }
@@ -37,10 +39,17 @@ public class Arm extends PIDSubsystem {
   @Override
   public void useOutput(double PIDOutput, double setpoint) {
     // Use the output here
-    double feedForward = ArmConstants.kHoldPosition * Math.cos(getMeasurement()); 
-    double motorOutput = feedForward + PIDOutput;
-    m_LeftArmMotor.set(motorOutput);
-    m_RightArmMotor.set(motorOutput);
+    if(m_AbsoluteEncoder.getPosition() < 90) {
+      double feedForward = ArmConstants.kHoldPosition * Math.cos(getMeasurement()); 
+      double motorOutput = feedForward + PIDOutput;
+      if(ArmConstants.kIsPidInverted){
+        m_LeftArmMotor.set(-motorOutput);
+        m_RightArmMotor.set(motorOutput);
+      } else{
+        m_LeftArmMotor.set(motorOutput);
+        m_RightArmMotor.set(-motorOutput);
+      }
+    }
 
   }
 
@@ -51,7 +60,13 @@ public class Arm extends PIDSubsystem {
   }
 
   public void setMotorOutputs(double output){
-    m_LeftArmMotor.set(output);
-    m_RightArmMotor.set(output);
+      if(ArmConstants.kIsMovingForwardActuallyMovingBack){
+        m_LeftArmMotor.set(-output);
+        m_RightArmMotor.set(output);
+      } else{
+        m_LeftArmMotor.set(output);
+        m_RightArmMotor.set(-output);
+      }
   }
+
 }

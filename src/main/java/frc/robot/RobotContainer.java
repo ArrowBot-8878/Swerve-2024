@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Commands.Drive;
 import frc.robot.Commands.IntakeConsume;
+import frc.robot.Commands.IntakeEject;
+import frc.robot.Commands.ShooterDump;
 import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
 import frc.robot.Commands.ArmControl.OpenLoopArm;
@@ -50,7 +52,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
   Arm m_Arm = new Arm();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake();
@@ -77,11 +79,13 @@ public class RobotContainer {
         ()-> -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband), 
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)));
-      
-    m_Arm.setDefaultCommand(new OpenLoopArm(m_Arm,  ()-> -MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kDriveDeadband)));
 
-    new Trigger(()-> m_operatorController.getRightTriggerAxis() > 0).onTrue(new ShooterEject(m_Shooter));
-    new Trigger(()-> m_operatorController.getLeftTriggerAxis() > 0).onTrue(new IntakeConsume(m_Intake));
+    new Trigger(()-> m_operatorController.getRawAxis(1) > 0.05 || m_operatorController.getRawAxis(0) < -0.05).onTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRawAxis(0)));
+    new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeConsume(m_Intake));
+    new Trigger(()-> m_operatorController.getRawButton(2)).whileTrue(new IntakeEject(m_Intake));
+    new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new ShooterEject(m_Shooter));
+    new Trigger(()-> m_operatorController.getRawButton(4)).whileTrue(new ShooterDump(m_Shooter));
+
     
 
     //TODO: comment out if not using the plain shooter mechanism

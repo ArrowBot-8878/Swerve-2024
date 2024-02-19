@@ -96,7 +96,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;
+    public static final double kDrivingP = 0.1;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
@@ -118,14 +118,28 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
+    //The two motor CAN ID's to control the arm mechanism
     public static final int kLeftArmMotor = 20;
     public static final int kRightArmMotor = 21;
+
+    //PID Constants
     public static final double kP = 0.5;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kHoldPosition = 1;
-    public static final int kMaxAmps = 40;
     public static final double angleTolerance = 2;
+
+    //PID Logic
+    //this variable stores whether or not the output direction matches what the PID thinks
+    //it's output direction is
+    public static final boolean kIsPidInverted = false;
+
+    //a variable to store the max amperage a motor can run at
+    public static final int kMaxAmps = 40;
+
+    //a constant to store whether the arm is move backward when you want it to move forward
+    //during open loop
+    public static final boolean kIsMovingForwardActuallyMovingBack = false;
 
     
   }
@@ -134,16 +148,21 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int kIntakeMotorCANID = 50;
-    public static final double kIntakeScalingFactor = 0.6;
+    public static final double kIntakeScalingFactor = 0.8;
     public static final boolean invertIntake = false;
   }
 
 
   public static final class ShooterConstants{
-    
+  //Shooter is only the mechanism that runs the fly wheel, has no interaction with the arm
   public static final int kTopMotorCAN = 40;
   public static final int kBottomMotorCAN = 41;
+
+  //scaling factor for controlling your max output
   public static final double kMotorOutputScaling = 0.6;
+
+  //a variable storing if your shooter is shooting the opposite direction of what you
+  //consider is forward
   public static final boolean isInverted = false;
   }
 
