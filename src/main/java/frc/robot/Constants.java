@@ -155,11 +155,11 @@ public final class Constants {
 
   public static final class ShooterConstants{
   //Shooter is only the mechanism that runs the fly wheel, has no interaction with the arm
-  public static final int kTopMotorCAN = 40;
-  public static final int kBottomMotorCAN = 41;
+  public static final int kLeftMotorCAN = 40;
+  public static final int kRightMotorCAN = 41;
 
   //scaling factor for controlling your max output
-  public static final double kMotorOutputScaling = 0.6;
+  public static final double ShooterSpeedScalar = 0.6;
 
   //a variable storing if your shooter is shooting the opposite direction of what you
   //consider is forward
@@ -194,5 +194,12 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
     public static final int LeftArmMotor = 0;
+  }
+
+  public static final class ClimberConstants {
+    public static final int LeftArmMotor = 51;
+    public static final int kRightArmMotor = 52;
+    public static final double kClimbOutputScalar = 0.5;
+    
   }
 }

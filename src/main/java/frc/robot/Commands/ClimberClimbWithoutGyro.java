@@ -4,18 +4,22 @@
 
 package frc.robot.Commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.Climb;
 
-public class ShooterDump extends Command {
-  /** Creates a new IntakeConsume. */
 
-  private final Shooter m_intake;
-  public ShooterDump(Shooter m_intake) {
+public class ClimberClimbWithoutGyro extends Command {
+  /** Creates a new ClimberClimbWithoutGyro. */
+  private final Climb m_Climb;
+  private final DoubleSupplier m_speedSupplier;
+
+  public ClimberClimbWithoutGyro(Climb m_climb, DoubleSupplier m_speedSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_intake = m_intake;
-    addRequirements(m_intake); 
+    this.m_Climb = m_climb;
+    this.m_speedSupplier = m_speedSupplier;
   }
 
   // Called when the command is initially scheduled.
@@ -24,15 +28,16 @@ public class ShooterDump extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
-  {
-    m_intake.setOutSpeeds(-ShooterConstants.ShooterSpeedScalar);
-  }
+  public void execute() {   
+    double outputSpeed = m_speedSupplier.getAsDouble() * ClimberConstants.kClimbOutputScalar;
+    double leftOutput = outputSpeed;
+    double rightOutput =outputSpeed;
+    m_Climb.setMotorOutput(leftOutput, rightOutput);}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setOutSpeeds(0);
+    m_Climb.setMotorOutput(0, 0);
   }
 
   // Returns true when the command should end.

@@ -26,7 +26,7 @@ public class ShooterEject extends Command {
   @Override
   public void execute() 
   {
-    m_intake.setOutSpeeds(ShooterConstants.kMotorOutputScaling);
+    m_intake.setOutSpeeds(ShooterConstants.ShooterSpeedScalar);
   }
 
   // Called once the command ends or is interrupted.

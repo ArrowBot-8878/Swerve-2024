@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import frc.robot.Commands.ClimberClimbWithoutGyro;
 import frc.robot.Commands.Drive;
 import frc.robot.Commands.IntakeConsume;
 import frc.robot.Commands.IntakeEject;
@@ -28,6 +29,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autos;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -56,6 +58,7 @@ public class RobotContainer {
   Arm m_Arm = new Arm();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake();
+  Climb m_Climb = new Climb();
   
 
 
@@ -119,6 +122,11 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+    new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
+    //Reverse Climb
+    new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
+
 
     // new JoystickButton(m_driverController, Button.kCircle.value).toggleOnTrue(new ClosedLoopArm(m_Arm, 45));
 
