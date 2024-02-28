@@ -54,7 +54,8 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  //Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
   Arm m_Arm = new Arm();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake();
@@ -119,11 +120,19 @@ public class RobotContainer {
             m_robotDrive));
 
       
-    new Trigger(()-> m_operatorController.getRawAxis(1) > 0.05 || m_operatorController.getRawAxis(0) < -0.05).onTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRawAxis(0)));
-    new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeConsume(m_Intake));
-    new Trigger(()-> m_operatorController.getRawButton(2)).whileTrue(new IntakeEject(m_Intake));
-    new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new ShooterEject(m_Shooter));
-    new Trigger(()-> m_operatorController.getRawButton(4)).whileTrue(new ShooterDump(m_Shooter));
+    // new Trigger(()-> m_operatorController.getRawAxis(0) > 0.05 || m_operatorController.getRawAxis(0) < -0.05).onTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRawAxis(0)));
+    // new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeConsume(m_Intake));
+    // new Trigger(()-> m_operatorController.getRawButton(2)).whileTrue(new IntakeEject(m_Intake));
+    // new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new ShooterEject(m_Shooter));
+    // new Trigger(()-> m_operatorController.getRawButton(4)).whileTrue(new ShooterDump(m_Shooter));
+
+    m_Arm.setDefaultCommand(new OpenLoopArm(m_Arm, ()-> MathUtil.applyDeadband(m_operatorController.getRightY(), 0.1)));
+    new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
+    new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new IntakeEject(m_Intake));
+    new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
+    new Trigger(()-> m_operatorController.getRightBumper()).whileTrue(new ShooterDump(m_Shooter));
+
+    
 
     new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
     //Reverse Climb
