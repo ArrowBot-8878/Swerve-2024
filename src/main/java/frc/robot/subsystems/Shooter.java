@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
 
   public void setOutSpeeds(double relativeSpeed){
     double m_LeftMotorOutput = relativeSpeed;
-    double m_RightMotorOutput = -relativeSpeed;
+    double m_RightMotorOutput = relativeSpeed;
 
     if (ShooterConstants.isInverted){
       m_LeftMotorOutput *= -1;

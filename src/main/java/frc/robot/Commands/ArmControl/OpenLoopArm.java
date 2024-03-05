@@ -32,6 +32,7 @@ public class OpenLoopArm extends Command {
   {
     double output = m_OutputSupplier.get();
     m_Arm.setMotorOutputs(output);
+    System.out.println("Open Looping");
   }
 
   // Called once the command ends or is interrupted.

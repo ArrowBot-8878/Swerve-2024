@@ -123,10 +123,10 @@ public final class Constants {
     public static final int kRightArmMotor = 21;
 
     //PID Constants
-    public static final double kP = 0.5;
+    public static final double kP = 0.015;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kHoldPosition = 1;
+    public static final double kHoldPosition = 0;
     public static final double angleTolerance = 2;
 
     //PID Logic
@@ -139,7 +139,7 @@ public final class Constants {
 
     //a constant to store whether the arm is move backward when you want it to move forward
     //during open loop
-    public static final boolean kIsMovingForwardActuallyMovingBack = false;
+    public static final boolean kIsMovingForwardActuallyMovingBack = true;
 
     
   }
@@ -159,7 +159,7 @@ public final class Constants {
   public static final int kRightMotorCAN = 41;
 
   //scaling factor for controlling your max output
-  public static final double ShooterSpeedScalar = 0.6;
+  public static final double ShooterSpeedScalar = 1;
 
   //a variable storing if your shooter is shooting the opposite direction of what you
   //consider is forward

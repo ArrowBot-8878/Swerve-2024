@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
@@ -34,11 +35,14 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.sql.Driver;
 import java.util.List;
 
 /*
@@ -59,7 +63,7 @@ public class RobotContainer {
   Arm m_Arm = new Arm();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake();
-  Climb m_Climb = new Climb();
+  // Climb m_Climb = new Climb();
   
 
 
@@ -69,7 +73,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_Autos = new Autos(m_robotDrive);
-    
+    m_Arm.disable();
     
     
     // Configure the button bindings
@@ -126,17 +130,22 @@ public class RobotContainer {
     // new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new ShooterEject(m_Shooter));
     // new Trigger(()-> m_operatorController.getRawButton(4)).whileTrue(new ShooterDump(m_Shooter));
 
-    m_Arm.setDefaultCommand(new OpenLoopArm(m_Arm, ()-> MathUtil.applyDeadband(m_operatorController.getRightY(), 0.1)));
+    new Trigger(()-> m_operatorController.getRightY() > 0.2 || m_operatorController.getRightY() < -0.2).whileTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRightY() * 0.8));
     new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
     new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new IntakeEject(m_Intake));
     new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
     new Trigger(()-> m_operatorController.getRightBumper()).whileTrue(new ShooterDump(m_Shooter));
 
+    new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, 93));
+    new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, 3));
+
+    new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
+
     
 
-    new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
-    //Reverse Climb
-    new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
+    // new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
+    // //Reverse Climb
+    // new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
 
 
     // new JoystickButton(m_driverController, Button.kCircle.value).toggleOnTrue(new ClosedLoopArm(m_Arm, 45));

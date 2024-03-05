@@ -38,7 +38,7 @@ public class Drive extends Command {
   public void execute() 
   {
     //scaling factor for velocity
-    double velocityScalingFactor = 0.5;
+    double velocityScalingFactor = 1;
 
     //scaling factor for rotational velocity
     double rotationalVelocityScalingFactor = 1;

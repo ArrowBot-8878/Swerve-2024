@@ -11,11 +11,11 @@ import frc.robot.subsystems.Shooter;
 public class ShooterEject extends Command {
   /** Creates a new IntakeConsume. */
 
-  private final Shooter m_intake;
-  public ShooterEject(Shooter m_intake) {
+  private final Shooter m_Shooter;
+  public ShooterEject(Shooter m_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_intake = m_intake;
-    addRequirements(m_intake); 
+    this.m_Shooter = m_Shooter;
+    addRequirements(m_Shooter); 
   }
 
   // Called when the command is initially scheduled.
@@ -26,13 +26,13 @@ public class ShooterEject extends Command {
   @Override
   public void execute() 
   {
-    m_intake.setOutSpeeds(ShooterConstants.ShooterSpeedScalar);
+    m_Shooter.setOutSpeeds(ShooterConstants.ShooterSpeedScalar);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setOutSpeeds(0);
+    m_Shooter.setOutSpeeds(0);
   }
 
   // Returns true when the command should end.
