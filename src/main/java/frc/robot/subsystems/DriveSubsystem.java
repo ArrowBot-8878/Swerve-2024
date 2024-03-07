@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.DriveConstants;
@@ -49,8 +50,9 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-
+  private final AHRS m_gyro = new AHRS();
+  // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  // ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -328,6 +330,6 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   public double getAngle(){
-    return m_gyro.getAngle(edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis.kRoll);
+    return -m_gyro.getAngle();
   }
 }

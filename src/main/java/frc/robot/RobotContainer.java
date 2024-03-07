@@ -36,6 +36,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -132,6 +133,9 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    new Trigger(()->m_driverController.getStartButton()).onTrue(new InstantCommand(()->m_robotDrive.zeroHeading(), m_robotDrive));
+
+
     new Trigger(()-> m_operatorController.getRightY() > 0.2 || m_operatorController.getRightY() < -0.2).whileTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRightY() * 0.8));
     new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
     new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new IntakeEject(m_Intake));
@@ -140,6 +144,7 @@ public class RobotContainer {
 
     new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, 93));
     new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, 3));
+    new Trigger(()-> m_operatorController.getBButton()).onTrue(new ClosedLoopArm(m_Arm, 20));
 
     new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
 
