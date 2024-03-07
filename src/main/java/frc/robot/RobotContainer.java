@@ -45,6 +45,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.sql.Driver;
 import java.util.List;
 
+import com.fasterxml.jackson.core.sym.Name;
+import com.pathplanner.lib.auto.NamedCommands;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -63,7 +66,8 @@ public class RobotContainer {
   Arm m_Arm = new Arm();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake();
-  // Climb m_Climb = new Climb();
+  Climb m_Climb = new Climb();
+
   
 
 
@@ -72,7 +76,12 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
+    
+    NamedCommands.registerCommand("RevShooter", new ShooterEject(m_Shooter));
+    NamedCommands.registerCommand("IndexToShooter", new IntakeConsume(m_Intake));
+
     m_Autos = new Autos(m_robotDrive);
+    
     m_Arm.disable();
     
     
@@ -123,13 +132,6 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-      
-    // new Trigger(()-> m_operatorController.getRawAxis(0) > 0.05 || m_operatorController.getRawAxis(0) < -0.05).onTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRawAxis(0)));
-    // new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeConsume(m_Intake));
-    // new Trigger(()-> m_operatorController.getRawButton(2)).whileTrue(new IntakeEject(m_Intake));
-    // new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new ShooterEject(m_Shooter));
-    // new Trigger(()-> m_operatorController.getRawButton(4)).whileTrue(new ShooterDump(m_Shooter));
-
     new Trigger(()-> m_operatorController.getRightY() > 0.2 || m_operatorController.getRightY() < -0.2).whileTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRightY() * 0.8));
     new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
     new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new IntakeEject(m_Intake));
@@ -143,9 +145,9 @@ public class RobotContainer {
 
     
 
-    // new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
-    // //Reverse Climb
-    // new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
+    new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
+    //Reverse Climb
+    new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
 
 
     // new JoystickButton(m_driverController, Button.kCircle.value).toggleOnTrue(new ClosedLoopArm(m_Arm, 45));
