@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -48,11 +49,12 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
-
+      
+// https://dev.studica.com/releases/2024/NavX.json
   // The gyro sensor
-  private final AHRS m_gyro = new AHRS();
+  // private final AHRS m_gyro; // = new AHRS();
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  // ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
+  private final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); // Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -72,8 +74,6 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
       });
-
-
 
 
   /** Creates a new DriveSubsystem. */
@@ -303,7 +303,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    m_gyro.reset();
+    ahrs.reset();
   }
 
   public boolean getIsFieldFlipped(){
@@ -325,11 +325,13 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    
+
+    return ahrs.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
 
   public double getAngle(){
-    return -m_gyro.getAngle();
+    return -ahrs.getAngle();
   }
 }
