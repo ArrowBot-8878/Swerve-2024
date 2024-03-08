@@ -25,9 +25,12 @@ import frc.robot.Commands.ShooterDump;
 import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
 import frc.robot.Commands.ArmControl.OpenLoopArm;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PositionConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autos;
 import frc.robot.subsystems.Climb;
@@ -80,6 +83,7 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("RevShooter", new ShooterEject(m_Shooter));
     NamedCommands.registerCommand("IndexToShooter", new IntakeConsume(m_Intake));
+    NamedCommands.registerCommand("SetShooterAmp", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
 
     m_Autos = new Autos(m_robotDrive);
     
@@ -142,9 +146,9 @@ public class RobotContainer {
     new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
     new Trigger(()-> m_operatorController.getRightBumper()).whileTrue(new ShooterDump(m_Shooter));
 
-    new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, 93));
-    new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, 3));
-    new Trigger(()-> m_operatorController.getBButton()).onTrue(new ClosedLoopArm(m_Arm, 20));
+    new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kAmpPosition));
+    new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
+    new Trigger(()-> m_operatorController.getBButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
 
     new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
 
