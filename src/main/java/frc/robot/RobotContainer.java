@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import frc.robot.Commands.AmpScore;
 import frc.robot.Commands.ClimberClimbWithoutGyro;
 import frc.robot.Commands.Drive;
 import frc.robot.Commands.IntakeConsume;
@@ -145,6 +146,8 @@ public class RobotContainer {
     new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new IntakeEject(m_Intake));
     new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
     new Trigger(()-> m_operatorController.getRightBumper()).whileTrue(new ShooterDump(m_Shooter));
+    new Trigger(()-> m_operatorController.getPOV(0) == 0).whileTrue(new AmpScore(m_Shooter, m_Intake));
+    
 
     new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kAmpPosition));
     new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));

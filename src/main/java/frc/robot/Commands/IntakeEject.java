@@ -25,7 +25,7 @@ public class IntakeEject extends Command {
   @Override
   public void execute() 
   {
-    double output = IntakeConstants.kIntakeScalingFactor;
+    double output = -IntakeConstants.kIntakeScalingFactor;
     m_intake.setOutSpeeds(output);
   }
 
