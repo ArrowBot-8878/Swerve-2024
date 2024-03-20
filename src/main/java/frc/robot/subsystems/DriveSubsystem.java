@@ -54,7 +54,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   // private final AHRS m_gyro; // = new AHRS();
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  private final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); // Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
+  private final AHRS ahrs = new AHRS(SerialPort.Port.kUSB); // Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
