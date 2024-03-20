@@ -335,3 +335,33 @@ public class DriveSubsystem extends SubsystemBase {
     return -ahrs.getAngle();
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * 2 note auto
+ * 3 note
+ * 4 note 
+ * 
+ * driver train characterization
+ * 
+ * discretization?
+ * 
+ * limit switch
+ * 
+ * 
+ * 
+ * 
+ * 
+ * march 28th 
+ * 
+ * april 4th
+ */
