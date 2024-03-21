@@ -147,7 +147,7 @@ public class RobotContainer {
     new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
     new Trigger(()-> m_operatorController.getRightBumper()).whileTrue(new ShooterDump(m_Shooter));
     new Trigger(()-> m_operatorController.getPOV(0) == 0).whileTrue(
-        new AmpScore(m_Shooter, m_Intake))
+    new AmpScore(m_Shooter, m_Intake))
       .onFalse(
         new RunCommand(()->m_Shooter.setOutSpeeds(0), m_Shooter).alongWith(
         new RunCommand(()-> m_Intake.setOutSpeeds(0), m_Intake)));

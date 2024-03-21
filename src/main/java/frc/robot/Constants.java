@@ -197,8 +197,8 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
-    public static final int LeftArmMotor = 51;
-    public static final int kRightArmMotor = 52;
+    public static final int kLefClimbMotor = 51;
+    public static final int kRightClimbMotor = 52;
     public static final double kClimbOutputScalar = 0.5;
     
   }
