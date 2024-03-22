@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     m_LeftMotor = new CANSparkMax(ShooterConstants.kLeftMotorCAN, CANSparkLowLevel.MotorType.kBrushless);
     m_RightMotor = new CANSparkMax(ShooterConstants.kRightMotorCAN, CANSparkLowLevel.MotorType.kBrushless);
-
+    
   }
 
   @Override

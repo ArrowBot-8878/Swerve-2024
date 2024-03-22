@@ -166,6 +166,7 @@ public class RobotContainer {
     new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
 
 
+    new Trigger(()-> m_operatorController.getPOV(0) == 180).onTrue(new RunCommand(()-> new IntakeConsume(m_Intake), m_Intake).until(()->m_Intake.isNoteObtained()).andThen(new RunCommand(()-> m_Intake.setOutSpeeds(0), m_Intake)));
     // new JoystickButton(m_driverController, Button.kCircle.value).toggleOnTrue(new ClosedLoopArm(m_Arm, 45));
 
 
