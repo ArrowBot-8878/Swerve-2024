@@ -23,5 +23,6 @@ public class ClosedLoopArm extends InstantCommand {
   public void initialize() {
     m_Arm.enable();
     m_Arm.setSetpoint(m_targetSetpoint);
+    System.out.println("start closed looping");
   }
 }
