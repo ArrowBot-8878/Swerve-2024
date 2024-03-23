@@ -159,7 +159,7 @@ public final class Constants {
   public static final int kRightMotorCAN = 41;
 
   //scaling factor for controlling your max output
-  public static final double ShooterSpeedScalar = 1;
+  public static final double ShooterSpeedScalar = 0.8;
 
   //a variable storing if your shooter is shooting the opposite direction of what you
   //consider is forward
