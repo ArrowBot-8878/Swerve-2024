@@ -205,8 +205,8 @@ public final class Constants {
 
   public static final class PositionConstants {
     public static final double kAmpPosition = 93;
-    public static final double kSpeakerPosition = 30;
-    public static final double kPickUpPosition = 3;
+    public static final double kSpeakerPosition = 29;
+    public static final double kPickUpPosition = 4;
 
   }
 }
