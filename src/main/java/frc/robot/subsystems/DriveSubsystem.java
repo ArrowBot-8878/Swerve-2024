@@ -55,6 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
   // private final AHRS m_gyro; // = new AHRS();
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final AHRS ahrs = new AHRS(SerialPort.Port.kUSB); // Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
+
+
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -221,10 +223,27 @@ public class DriveSubsystem extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
-    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-        fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getAngle()))
-            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+    // var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+    //     fieldRelative
+    //         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getAngle()))
+    //         : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+
+    double dt = 0.02;
+    Rotation2d currentAngle =  DriverStation.getAlliance().get() ==  DriverStation.Alliance.Red ? 
+      getHeadingAsRotation2d().rotateBy(Rotation2d.fromDegrees(180)) : 
+      getHeadingAsRotation2d();
+
+    var swerveModuleStates =
+    DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        ChassisSpeeds.discretize(
+            fieldRelative 
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, currentAngle) 
+            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
+            dt));
+
+
+
+
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -236,6 +255,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
   {
+    chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -301,9 +321,26 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.resetEncoders();
   }
 
-  /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    ahrs.reset();
+  // /** Zeroes the heading of the robot. */
+  // public void zeroHeading() {
+  //   ahrs.reset();
+  // }
+
+  public void zeroHeading(){
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+      .equals(DriverStation.Alliance.Blue);
+    Rotation2d heading = isBlue ? new Rotation2d() : new Rotation2d(Math.PI);
+
+    m_odometry.resetPosition(
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_rearLeft.getPosition(),
+                m_rearRight.getPosition()
+        },
+        new Pose2d(m_odometry.getPoseMeters().getX(), m_odometry.getPoseMeters().getY(),
+                heading));
   }
 
   public boolean getIsFieldFlipped(){
@@ -317,6 +354,10 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(getAngle()).getDegrees();
+  }
+
+  public Rotation2d getHeadingAsRotation2d() {
+    return new Rotation2d(getAngle());
   }
 
   /**

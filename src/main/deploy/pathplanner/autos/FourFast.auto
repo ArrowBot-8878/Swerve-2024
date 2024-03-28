@@ -34,14 +34,14 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "SetIntakeGround"
+                        "name": "ArmToSpeaker"
                       }
                     }
                   ]
                 }
               },
               {
-                "type": "sequential",
+                "type": "deadline",
                 "data": {
                   "commands": [
                     {

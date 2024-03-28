@@ -58,7 +58,7 @@
             {
               "type": "named",
               "data": {
-                "name": "SetIntakeInShooterIn"
+                "name": "ArmToSpeaker"
               }
             }
           ]
@@ -72,35 +72,6 @@
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IndexIntakeToShooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "pass",
-      "waypointRelativePos": 0.45,
-      "command": {
-        "type": "deadline",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.38
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeDump"
-              }
-            },
             {
               "type": "named",
               "data": {

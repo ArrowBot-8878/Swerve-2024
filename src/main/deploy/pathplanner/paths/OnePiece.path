@@ -101,7 +101,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "OnePieceMobility",
+  "folder": null,
   "previewStartingState": {
     "rotation": -58.94059117029002,
     "velocity": 0

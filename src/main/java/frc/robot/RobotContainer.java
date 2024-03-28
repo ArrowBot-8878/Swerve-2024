@@ -26,6 +26,11 @@ import frc.robot.Commands.ShooterDump;
 import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
 import frc.robot.Commands.ArmControl.OpenLoopArm;
+import frc.robot.Commands.AutoCommands.AutoIntake;
+import frc.robot.Commands.AutoCommands.IndexIntakeToShooter;
+import frc.robot.Commands.AutoCommands.IntakeConsumeAuto;
+import frc.robot.Commands.AutoCommands.ShooterFire;
+import frc.robot.Commands.AutoCommands.ShooterRescind;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -49,6 +54,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.sql.Driver;
 import java.util.List;
+
+import javax.swing.text.Position;
 
 import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -133,41 +140,64 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
 
-    new Trigger(()->m_driverController.getStartButton()).onTrue(new InstantCommand(()->m_robotDrive.zeroHeading(), m_robotDrive));
+    //Driver commands
+        new JoystickButton(m_driverController, Button.kR1.value)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.setX(),
+                m_robotDrive));
+        //Climber
+        new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
+        //Reverse Climb
+        new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
 
+        //Zero Heading
+        new Trigger(()->m_driverController.getStartButton()).onTrue(new InstantCommand(()->m_robotDrive.zeroHeading(), m_robotDrive));
 
-    new Trigger(()-> m_operatorController.getRightY() > 0.2 || m_operatorController.getRightY() < -0.2).whileTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRightY() * 0.8));
-    new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
-    new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new IntakeEject(m_Intake));
-    new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
-    new Trigger(()-> m_operatorController.getRightBumper()).whileTrue(new ShooterDump(m_Shooter));
-    new Trigger(()-> m_operatorController.getPOV(0) == 0).whileTrue(
-    new AmpScore(m_Shooter, m_Intake))
-      .onFalse(
-        new RunCommand(()->m_Shooter.setOutSpeeds(0), m_Shooter).alongWith(
-        new RunCommand(()-> m_Intake.setOutSpeeds(0), m_Intake)));
-    
+    //Operator commands
+        //Open loop arm control
+        new Trigger(()-> m_operatorController.getRightY() > 0.2 || m_operatorController.getRightY() < -0.2).whileTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRightY() * 0.8));
+        //intake consume
+        new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
+        //intake until has game piece
+        new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new AutoIntake(m_Intake));
+        //Shooter fire
+        new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
 
+        //Amp Eject
+        new Trigger(()-> m_operatorController.getPOV(0) == 0).whileTrue(
+          new AmpScore(m_Shooter, m_Intake))
+              .onFalse(
+                new RunCommand(()->m_Shooter.setOutSpeeds(0), m_Shooter).alongWith(
+                new RunCommand(()-> m_Intake.setOutSpeeds(0), m_Intake)));
+      
+    //Amp position
     new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kAmpPosition));
+    //Pick up position
     new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
+    //Score position
     new Trigger(()-> m_operatorController.getBButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
 
-    new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
+
+    //Non driver controlled actions
+        //disables the PID on the arm when you hit disable
+        new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
 
     
 
-    new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
-    //Reverse Climb
-    new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
 
 
-    new Trigger(()-> m_operatorController.getPOV(0) == 180).onTrue(new RunCommand(()-> new IntakeConsume(m_Intake), m_Intake).until(()->m_Intake.isNoteObtained()).andThen(new RunCommand(()-> m_Intake.setOutSpeeds(0), m_Intake)));
-    // new JoystickButton(m_driverController, Button.kCircle.value).toggleOnTrue(new ClosedLoopArm(m_Arm, 45));
+    //Sets up all the commands to be run during autonomous
+    NamedCommands.registerCommand("ShooterFire", new ShooterFire(m_Shooter, ()-> 0.5));
+    NamedCommands.registerCommand("ShooterFireFast", new ShooterFire(m_Shooter, ()-> 1.0));
+    NamedCommands.registerCommand("ShooterRescind", new ShooterRescind(m_Shooter, ()-> 0.2));
+    NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake));
+    NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake));
+    NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
+    NamedCommands.registerCommand("AutoIntake", new AutoIntake(m_Intake));
+    NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
+    NamedCommands.registerCommand("ArmToPickUp", new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
+    NamedCommands.registerCommand("ArmToSpeaker", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
 
 
     
