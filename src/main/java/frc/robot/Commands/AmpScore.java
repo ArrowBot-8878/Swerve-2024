@@ -17,7 +17,7 @@ public class AmpScore extends ParallelCommandGroup {
   public AmpScore(Shooter m_Shooter, Intake m_Intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new RunCommand(()->m_Shooter.setOutSpeeds(-0.2), m_Shooter)
-    .alongWith(new RunCommand(()-> m_Intake.setOutSpeeds(0.2), m_Intake)));
+    addCommands(new RunCommand(()->m_Shooter.setOutSpeeds(0.2), m_Shooter)
+    .alongWith(new RunCommand(()-> m_Intake.setOutSpeeds(-0.2), m_Intake)));
   }
 }
