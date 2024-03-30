@@ -44,8 +44,8 @@ public class Drive extends Command {
     double rotationalVelocityScalingFactor = 1;
 
     //a variable on whether you want to square inputs or not, if you do, only change the boolean to true
-    boolean squaredInputs = false;
-    velocityScalingFactor = squaredInputs ? velocityScalingFactor : Math.pow(velocityScalingFactor, 2);
+    // boolean squaredInputs = false;
+    // velocityScalingFactor = squaredInputs ? velocityScalingFactor : Math.pow(velocityScalingFactor, 2);
 
     //applies the scaling factors to each of the values from the joysticks which are stored in the suppliers
     double xVelocity = (double)m_xVelocitySupplier.get() * velocityScalingFactor;

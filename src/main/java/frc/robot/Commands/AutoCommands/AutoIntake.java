@@ -26,7 +26,8 @@ public class AutoIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double output = IntakeConstants.kIntakeScalingFactor;
+    // double output = IntakeConstants.kIntakeScalingFactor;
+    double output = 1;
     m_Intake.setOutSpeeds(output);
   }
 
