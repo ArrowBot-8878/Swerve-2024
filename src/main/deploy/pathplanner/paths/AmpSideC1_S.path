@@ -3,57 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2945574370576298,
-        "y": 5.551187918118234
+        "x": 2.7337543047179125,
+        "y": 7.0050704681015805
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.249126788056797,
-        "y": 4.082619685811823
+        "x": 0.7365015087811937,
+        "y": 7.445640937793504
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6162688461334,
-        "y": 3.950448544904246
+        "x": 0.7071301441350655,
+        "y": 6.667299774671107
       },
       "prevControl": {
-        "x": 2.054148691935888,
-        "y": 4.13782192963675
+        "x": 0.8539869673657066,
+        "y": 6.961013421132389
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 55.61310453514137,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
-    {
-      "name": "StopFlyWheel",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "deadline",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.1
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "ShooterStop"
-              }
-            }
-          ]
-        }
-      }
-    },
     {
       "name": "PrepArrangement",
       "waypointRelativePos": 0,
@@ -64,7 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "ArmToPickUp"
+                "name": "ArmToSpeaker"
               }
             }
           ]
@@ -72,8 +55,8 @@
       }
     },
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.65,
+      "name": "PrepShooter",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -81,7 +64,30 @@
             {
               "type": "named",
               "data": {
-                "name": "AutoIntake"
+                "name": "ShooterFireFast"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Fire",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "deadline",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "IndexIntakeToShooter"
               }
             }
           ]
@@ -91,19 +97,19 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 1.8,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.7899106082461234,
+    "rotation": 61.26020470831198,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "FourFast",
+  "folder": "ArrowAmp",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -0.9877603996397951,
     "velocity": 0
   },
   "useDefaultConstraints": false

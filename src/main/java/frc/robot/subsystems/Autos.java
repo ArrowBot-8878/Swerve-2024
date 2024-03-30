@@ -34,12 +34,17 @@ public class Autos {
     autoChooser.addOption("AmpSide", "AmpSide");
     autoChooser.addOption("ShootAndSit", "ShootAndSit");
     autoChooser.addOption("FourFast", "FourFast");
+    autoChooser.addOption("AmpSide3", "AmpSide3");
+    autoChooser.addOption("AmpSide2", "AmpSide2");
 
 
     m_commandMap.put("OpenSide", new PathPlannerAuto("OpenSide"));
     m_commandMap.put("AmpSide", new PathPlannerAuto("AmpSide"));
     m_commandMap.put("ShootAndSit", new PathPlannerAuto("ShootAndSit"));
     m_commandMap.put("FourFast", new PathPlannerAuto("FourFast"));
+    m_commandMap.put("AmpSide3", new PathPlannerAuto("AmpSide3"));
+    m_commandMap.put("AmpSide2", new PathPlannerAuto("AmpSide2"));
+    
   }
 
 
