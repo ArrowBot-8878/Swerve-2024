@@ -148,7 +148,7 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int kIntakeMotorCANID = 50;
-    public static final double kIntakeScalingFactor = .25;
+    public static final double kIntakeScalingFactor = .35;
     public static final boolean invertIntake = false;
   }
 
