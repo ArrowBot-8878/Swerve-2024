@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -56,10 +57,13 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   // private final AHRS m_gyro; // = new AHRS();
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  private final AHRS ahrs = new AHRS(SerialPort.Port.kUSB); // Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB 
 
   Field2d m_field = new Field2d();
 
+
+  //Isaac: comment out which ever one you are not using, the top one is the micro and the bottom one is the mxp
+  private final AHRS ahrs = new AHRS(SerialPort.Port.kUSB); //Micro
+  // private final AHRS ahrs = new AHRS(SPI.Port.kMXP, (byte) 200); //NavX2
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
