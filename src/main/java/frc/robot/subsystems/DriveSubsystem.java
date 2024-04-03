@@ -22,6 +22,8 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.SPI;
@@ -56,6 +58,8 @@ public class DriveSubsystem extends SubsystemBase {
   // private final AHRS m_gyro; // = new AHRS();
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
+  Field2d m_field = new Field2d();
+
 
   //Isaac: comment out which ever one you are not using, the top one is the micro and the bottom one is the mxp
   private final AHRS ahrs = new AHRS(SerialPort.Port.kUSB); //Micro
@@ -85,21 +89,8 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   //This is the constructor
   public DriveSubsystem() {
-    AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                this::getIsFieldFlipped,
-                this // Reference to this subsystem to set requirements
-        );
+
+        SmartDashboard.putData("field", m_field);
         
 
   }
@@ -122,6 +113,8 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+        m_field.setRobotPose(getPose());
   }
 
   /**
@@ -222,28 +215,40 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
+    boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
+    .equals(DriverStation.Alliance.Blue);
+
     // Convert the commanded speeds into the correct units for the drivetrain
     double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
-    // var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-    //     fieldRelative
-    //         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getAngle()))
-    //         : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 
-    double dt = 0.02;
-    Rotation2d currentAngle =  DriverStation.getAlliance().get() ==  DriverStation.Alliance.Red ? 
-      getHeadingAsRotation2d().rotateBy(Rotation2d.fromDegrees(180)) : 
-      getHeadingAsRotation2d();
 
-    var swerveModuleStates =
-    DriveConstants.kDriveKinematics.toSwerveModuleStates(
-        ChassisSpeeds.discretize(
-            fieldRelative 
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, currentAngle) 
-            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
-            dt));
+   if(!isBlue){
+    xSpeedDelivered *= -1;
+    ySpeedDelivered *= -1;
+   }
+
+
+
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, getPose().getRotation())
+            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+
+    // double dt = 0.02;
+    // Rotation2d currentAngle =  DriverStation.getAlliance().get() ==  DriverStation.Alliance.Red ? 
+    //   getHeadingAsRotation2d().rotateBy(Rotation2d.fromDegrees(180)) : 
+    //   getHeadingAsRotation2d();
+
+    // var swerveModuleStates =
+    // DriveConstants.kDriveKinematics.toSwerveModuleStates(
+    //     ChassisSpeeds.discretize(
+    //         fieldRelative 
+    //         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, currentAngle) 
+    //         : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
+    //         dt));
 
 
 
@@ -259,7 +264,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
   {
-    chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+    // chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -333,7 +338,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void zeroHeading(){
     boolean isBlue = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)
       .equals(DriverStation.Alliance.Blue);
-    Rotation2d heading = isBlue ? new Rotation2d() : new Rotation2d(Math.PI);
+    Rotation2d heading = isBlue ? new Rotation2d() : Rotation2d.fromRadians(Math.PI);
 
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(getHeading()),
@@ -378,6 +383,24 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double getAngle(){
     return -ahrs.getAngle();
+  }
+
+  public void configurAutoBuilder(){
+        AutoBuilder.configureHolonomic(
+                this::getPose, // Robot pose supplier
+                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                        4.5, // Max module speed, in m/s
+                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                this::getIsFieldFlipped,
+                this // Reference to this subsystem to set requirements
+        );
   }
 }
 

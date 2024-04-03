@@ -148,7 +148,7 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int kIntakeMotorCANID = 50;
-    public static final double kIntakeScalingFactor = 0.8;
+    public static final double kIntakeScalingFactor = .5;
     public static final boolean invertIntake = false;
   }
 
@@ -199,14 +199,15 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int kLefClimbMotor = 51;
     public static final int kRightClimbMotor = 52;
-    public static final double kClimbOutputScalar = 0.5;
+    public static final double kClimbOutputScalar = 1;
     
   }
 
   public static final class PositionConstants {
-    public static final double kAmpPosition = 93;
+    public static final double kAmpPosition = 100; //93
     public static final double kSpeakerPosition = 29;
     public static final double kPickUpPosition = 4;
+    public static final double kStageShot = 39.5;
 
   }
 }

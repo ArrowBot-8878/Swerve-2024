@@ -88,10 +88,24 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    
-    NamedCommands.registerCommand("RevShooter", new ShooterEject(m_Shooter));
-    NamedCommands.registerCommand("IndexToShooter", new IntakeConsume(m_Intake));
-    NamedCommands.registerCommand("SetShooterAmp", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
+        //Sets up all the commands to be run during autonomous
+        NamedCommands.registerCommand("ShooterFire", new ShooterFire(m_Shooter, ()-> 0.5));
+        NamedCommands.registerCommand("ShooterFireFast", new ShooterFire(m_Shooter, ()-> 1.0));
+        NamedCommands.registerCommand("ShooterRescind", new ShooterRescind(m_Shooter, ()-> 0.2));
+        NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake));
+        NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake));
+        NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
+        NamedCommands.registerCommand("AutoIntake", new AutoIntake(m_Intake));
+        NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
+        NamedCommands.registerCommand("ArmToPickUp", new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
+        NamedCommands.registerCommand("ArmToSpeaker", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
+        NamedCommands.registerCommand("InitialShot", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition - 4));
+
+
+        m_robotDrive.configurAutoBuilder();
+    // NamedCommands.registerCommand("RevShooter", new ShooterEject(m_Shooter));
+    // NamedCommands.registerCommand("IndexToShooter", new IntakeConsume(m_Intake));
+    // NamedCommands.registerCommand("SetShooterAmp", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
 
     m_Autos = new Autos(m_robotDrive);
     
@@ -177,8 +191,8 @@ public class RobotContainer {
     new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
     //Score position
     new Trigger(()-> m_operatorController.getBButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
-
-
+    //Stage position
+    new Trigger(()-> m_operatorController.getXButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kStageShot));
     //Non driver controlled actions
         //disables the PID on the arm when you hit disable
         new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
@@ -187,17 +201,7 @@ public class RobotContainer {
 
 
 
-    //Sets up all the commands to be run during autonomous
-    NamedCommands.registerCommand("ShooterFire", new ShooterFire(m_Shooter, ()-> 0.5));
-    NamedCommands.registerCommand("ShooterFireFast", new ShooterFire(m_Shooter, ()-> 1.0));
-    NamedCommands.registerCommand("ShooterRescind", new ShooterRescind(m_Shooter, ()-> 0.2));
-    NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake));
-    NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake));
-    NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
-    NamedCommands.registerCommand("AutoIntake", new AutoIntake(m_Intake));
-    NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
-    NamedCommands.registerCommand("ArmToPickUp", new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
-    NamedCommands.registerCommand("ArmToSpeaker", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
+
 
 
     

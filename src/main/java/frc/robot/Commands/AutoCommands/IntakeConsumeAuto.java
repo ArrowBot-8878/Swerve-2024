@@ -29,8 +29,7 @@ public class IntakeConsumeAuto extends Command {
   @Override
   public void execute() 
   {
-    double output = IntakeConstants.kIntakeScalingFactor;
-    m_intake.setOutSpeeds(m_SpeedSupplier.getAsDouble());
+    m_intake.setOutSpeeds(IntakeConstants.kIntakeScalingFactor);
   }
 
   // Called once the command ends or is interrupted.
