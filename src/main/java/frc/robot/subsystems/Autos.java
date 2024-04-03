@@ -36,6 +36,8 @@ public class Autos {
     autoChooser.addOption("FourFast", "FourFast");
     autoChooser.addOption("AmpSide3", "AmpSide3");
     autoChooser.addOption("AmpSide2", "AmpSide2");
+    autoChooser.addOption("3NoteStage", "3NoteStage");
+
 
 
     m_commandMap.put("OpenSide", new PathPlannerAuto("OpenSide"));
@@ -44,6 +46,7 @@ public class Autos {
     m_commandMap.put("FourFast", new PathPlannerAuto("FourFast"));
     m_commandMap.put("AmpSide3", new PathPlannerAuto("AmpSide3"));
     m_commandMap.put("AmpSide2", new PathPlannerAuto("AmpSide2"));
+    m_commandMap.put("3NoteStage", new PathPlannerAuto("3NoteStage"));
     
   }
 
