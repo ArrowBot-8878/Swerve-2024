@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "PrepArrangement",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -56,7 +56,7 @@
     },
     {
       "name": "PrepShooter",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.2,
       "command": {
         "type": "parallel",
         "data": {
@@ -73,7 +73,7 @@
     },
     {
       "name": "Fire",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "deadline",
         "data": {
@@ -97,7 +97,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 1.5,
+    "maxAcceleration": 1.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
