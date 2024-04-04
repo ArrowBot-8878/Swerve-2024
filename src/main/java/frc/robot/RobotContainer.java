@@ -27,6 +27,7 @@ import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
 import frc.robot.Commands.ArmControl.OpenLoopArm;
 import frc.robot.Commands.AutoCommands.AutoIntake;
+import frc.robot.Commands.AutoCommands.AutoIntakeStronger;
 import frc.robot.Commands.AutoCommands.IndexIntakeToShooter;
 import frc.robot.Commands.AutoCommands.IntakeConsumeAuto;
 import frc.robot.Commands.AutoCommands.ShooterFire;
@@ -95,7 +96,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake));
         NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake));
         NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
-        NamedCommands.registerCommand("AutoIntake", new AutoIntake(m_Intake));
+        NamedCommands.registerCommand("AutoIntake", new AutoIntakeStronger(m_Intake));
         NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
         NamedCommands.registerCommand("ArmToPickUp", new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
         NamedCommands.registerCommand("ArmToSpeaker", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));

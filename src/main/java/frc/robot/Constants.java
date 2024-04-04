@@ -149,6 +149,10 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int kIntakeMotorCANID = 50;
     public static final double kIntakeScalingFactor = .65;
+    
+    // used for a second command that runs the intake at this 
+    //higher speed, currenty planned for specifically auto
+    public static final double kIntakeScalingFactorStronger = 1; 
     public static final boolean invertIntake = false;
   }
 
