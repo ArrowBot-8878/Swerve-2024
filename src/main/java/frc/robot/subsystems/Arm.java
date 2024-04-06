@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ArmConstants;
 
@@ -80,6 +81,8 @@ public class Arm extends PIDSubsystem {
 
   @Override
   public void periodic(){
+    SmartDashboard.putNumber("Arm Deg", m_AbsoluteEncoder.getPosition());
+    SmartDashboard.putNumber("Arm Left Motor power", m_LeftArmMotor.get());
     m_DegreeAcceleration = (m_AbsoluteEncoder.getVelocity() - m_PreviousDegreeVelocity) / m_TimePeriod;
     m_PreviousDegreeVelocity = m_AbsoluteEncoder.getVelocity();
     m_AbsoluteEncoder.getVelocity();
