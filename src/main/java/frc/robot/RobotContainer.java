@@ -26,8 +26,8 @@ import frc.robot.Commands.ShooterDump;
 import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
 import frc.robot.Commands.ArmControl.OpenLoopArm;
+import frc.robot.Commands.AutoCommands.AutoFeedAlign;
 import frc.robot.Commands.AutoCommands.AutoIntake;
-import frc.robot.Commands.AutoCommands.AutoIntakeStronger;
 import frc.robot.Commands.AutoCommands.IndexIntakeToShooter;
 import frc.robot.Commands.AutoCommands.IntakeConsumeAuto;
 import frc.robot.Commands.AutoCommands.ShooterFire;
@@ -96,7 +96,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake));
         NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake));
         NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
-        NamedCommands.registerCommand("AutoIntake", new AutoIntakeStronger(m_Intake));
         NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
         NamedCommands.registerCommand("ArmToPickUp", new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
         NamedCommands.registerCommand("ArmToSpeaker", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
@@ -198,6 +197,7 @@ public class RobotContainer {
         //disables the PID on the arm when you hit disable
         new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
 
+     new Trigger(()-> m_driverController.getRightBumperPressed()).whileTrue(new AutoFeedAlign(m_robotDrive, m_Arm, m_Shooter, ()-> m_driverController.getLeftX(), ()-> m_driverController.getLeftY()));
     
 
 
