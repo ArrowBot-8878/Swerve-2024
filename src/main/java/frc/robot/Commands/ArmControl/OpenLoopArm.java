@@ -24,6 +24,7 @@ public class OpenLoopArm extends Command {
   @Override
   public void initialize() {
     m_Arm.disable();
+    System.out.println("Open Looping");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,6 +33,7 @@ public class OpenLoopArm extends Command {
   {
     double output = m_OutputSupplier.get();
     m_Arm.setMotorOutputs(output);
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -39,6 +41,7 @@ public class OpenLoopArm extends Command {
   public void end(boolean interrupted) 
   {
     m_Arm.setMotorOutputs(0);
+    System.out.println("Open Loop ending");
   }
 
   // Returns true when the command should end.

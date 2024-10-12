@@ -13,12 +13,12 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Intake. */
-  private final CANSparkMax m_topMotor;
-  private final CANSparkMax m_bottomMotor;
+  private final CANSparkMax m_LeftMotor;
+  private final CANSparkMax m_RightMotor;
   public Shooter() {
-    m_topMotor = new CANSparkMax(ShooterConstants.kTopMotorCAN, CANSparkLowLevel.MotorType.kBrushless);
-    m_bottomMotor = new CANSparkMax(ShooterConstants.kBottomMotorCAN, CANSparkLowLevel.MotorType.kBrushless);
-
+    m_LeftMotor = new CANSparkMax(ShooterConstants.kLeftMotorCAN, CANSparkLowLevel.MotorType.kBrushless);
+    m_RightMotor = new CANSparkMax(ShooterConstants.kRightMotorCAN, CANSparkLowLevel.MotorType.kBrushless);
+    
   }
 
   @Override
@@ -27,15 +27,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setOutSpeeds(double relativeSpeed){
-    double topOutput = relativeSpeed;
-    double bottomOutput = relativeSpeed * -1;
+    double m_LeftMotorOutput = relativeSpeed;
+    double m_RightMotorOutput = relativeSpeed;
 
     if (ShooterConstants.isInverted){
-      topOutput *= -1;
-      bottomOutput *= -1;
+      m_LeftMotorOutput *= -1;
+      m_RightMotorOutput *= -1;
     }
 
-    m_topMotor.set(topOutput);
-    m_bottomMotor.set(bottomOutput);
+    m_LeftMotor.set(m_LeftMotorOutput);
+    m_RightMotor.set(m_RightMotorOutput);
   }
 }

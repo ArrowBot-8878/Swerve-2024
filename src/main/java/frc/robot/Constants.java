@@ -96,7 +96,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.4;
+    public static final double kDrivingP = 0.1;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
@@ -123,10 +123,10 @@ public final class Constants {
     public static final int kRightArmMotor = 21;
 
     //PID Constants
-    public static final double kP = 0.5;
+    public static final double kP = 0.015;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kHoldPosition = 1;
+    public static final double kHoldPosition = 0;
     public static final double angleTolerance = 2;
 
     //PID Logic
@@ -139,7 +139,7 @@ public final class Constants {
 
     //a constant to store whether the arm is move backward when you want it to move forward
     //during open loop
-    public static final boolean kIsMovingForwardActuallyMovingBack = false;
+    public static final boolean kIsMovingForwardActuallyMovingBack = true;
 
     
   }
@@ -148,18 +148,22 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int kIntakeMotorCANID = 50;
-    public static final double kIntakeScalingFactor = 0.8;
+    public static final double kIntakeScalingFactor = .50;
+    
+    // used for a second command that runs the intake at this 
+    //higher speed, currenty planned for specifically auto
+    public static final double kIntakeScalingFactorStronger = 1; 
     public static final boolean invertIntake = false;
   }
 
 
   public static final class ShooterConstants{
   //Shooter is only the mechanism that runs the fly wheel, has no interaction with the arm
-  public static final int kTopMotorCAN = 40;
-  public static final int kBottomMotorCAN = 41;
+  public static final int kLeftMotorCAN = 40;
+  public static final int kRightMotorCAN = 41;
 
   //scaling factor for controlling your max output
-  public static final double kMotorOutputScaling = 0.6;
+  public static final double ShooterSpeedScalar = 0.8;
 
   //a variable storing if your shooter is shooting the opposite direction of what you
   //consider is forward
@@ -194,5 +198,20 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
     public static final int LeftArmMotor = 0;
+  }
+
+  public static final class ClimberConstants {
+    public static final int kLefClimbMotor = 51;
+    public static final int kRightClimbMotor = 52;
+    public static final double kClimbOutputScalar = 1;
+    
+  }
+
+  public static final class PositionConstants {
+    public static final double kAmpPosition = 100; //93
+    public static final double kSpeakerPosition = 29;
+    public static final double kPickUpPosition = 4;
+    public static final double kStageShot = 43;
+
   }
 }

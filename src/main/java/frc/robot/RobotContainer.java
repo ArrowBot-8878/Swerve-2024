@@ -13,9 +13,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import frc.robot.Commands.AmpScore;
+import frc.robot.Commands.ClimberClimbWithoutGyro;
 import frc.robot.Commands.Drive;
 import frc.robot.Commands.IntakeConsume;
 import frc.robot.Commands.IntakeEject;
@@ -23,21 +26,40 @@ import frc.robot.Commands.ShooterDump;
 import frc.robot.Commands.ShooterEject;
 import frc.robot.Commands.ArmControl.ClosedLoopArm;
 import frc.robot.Commands.ArmControl.OpenLoopArm;
+import frc.robot.Commands.AutoCommands.AutoIntake;
+import frc.robot.Commands.AutoCommands.AutoIntakeStronger;
+import frc.robot.Commands.AutoCommands.IndexIntakeToShooter;
+import frc.robot.Commands.AutoCommands.IntakeConsumeAuto;
+import frc.robot.Commands.AutoCommands.ShooterFire;
+import frc.robot.Commands.AutoCommands.ShooterRescind;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PositionConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autos;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.sql.Driver;
 import java.util.List;
+
+import javax.swing.text.Position;
+
+import com.fasterxml.jackson.core.sym.Name;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -52,10 +74,13 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  //Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
   Arm m_Arm = new Arm();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake();
+  Climb m_Climb = new Climb();
+
   
 
 
@@ -64,8 +89,28 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
+        //Sets up all the commands to be run during autonomous
+        NamedCommands.registerCommand("ShooterFire", new ShooterFire(m_Shooter, ()-> 0.5));
+        NamedCommands.registerCommand("ShooterFireFast", new ShooterFire(m_Shooter, ()-> 1.0));
+        NamedCommands.registerCommand("ShooterRescind", new ShooterRescind(m_Shooter, ()-> 0.2));
+        NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake, 0.2));
+        NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake, -0.2));
+        NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
+        NamedCommands.registerCommand("AutoIntake", new AutoIntakeStronger(m_Intake));
+        NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
+        NamedCommands.registerCommand("ArmToPickUp", new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
+        NamedCommands.registerCommand("ArmToSpeaker", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
+        NamedCommands.registerCommand("InitialShot", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition - 4));
+
+
+        m_robotDrive.configurAutoBuilder();
+    // NamedCommands.registerCommand("RevShooter", new ShooterEject(m_Shooter));
+    // NamedCommands.registerCommand("IndexToShooter", new IntakeConsume(m_Intake));
+    // NamedCommands.registerCommand("SetShooterAmp", new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
+
     m_Autos = new Autos(m_robotDrive);
     
+    m_Arm.disable();
     
     
     // Configure the button bindings
@@ -80,11 +125,6 @@ public class RobotContainer {
         () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband), 
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)));
 
-    new Trigger(()-> m_operatorController.getRawAxis(1) > 0.05 || m_operatorController.getRawAxis(0) < -0.05).onTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRawAxis(0)));
-    new Trigger(()-> m_operatorController.getRawButton(3)).whileTrue(new IntakeConsume(m_Intake));
-    new Trigger(()-> m_operatorController.getRawButton(1)).whileTrue(new IntakeEject(m_Intake));
-    new Trigger(()-> m_operatorController.getRawButton(6)).whileTrue(new ShooterEject(m_Shooter));
-    new Trigger(()-> m_operatorController.getRawButton(7)).whileTrue(new ShooterDump(m_Shooter));
 
     
 
@@ -115,12 +155,54 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
 
-    // new JoystickButton(m_driverController, Button.kCircle.value).toggleOnTrue(new ClosedLoopArm(m_Arm, 45));
+    //Driver commands
+        new JoystickButton(m_driverController, Button.kR1.value)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.setX(),
+                m_robotDrive));
+        //Climber
+        new Trigger(()-> m_driverController.getRightTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> m_driverController.getRightTriggerAxis()));
+        //Reverse Climb
+        new Trigger(()-> m_driverController.getLeftTriggerAxis() != 0).whileTrue(new ClimberClimbWithoutGyro(m_Climb, ()-> -m_driverController.getLeftTriggerAxis()));
+
+        //Zero Heading
+        new Trigger(()->m_driverController.getStartButton()).onTrue(new InstantCommand(()->m_robotDrive.zeroHeading(), m_robotDrive));
+
+    //Operator commands
+        //Open loop arm control
+        new Trigger(()-> m_operatorController.getRightY() > 0.2 || m_operatorController.getRightY() < -0.2).whileTrue(new OpenLoopArm(m_Arm, ()-> m_operatorController.getRightY() * 0.8));
+        //intake consume
+        new Trigger(()-> m_operatorController.getLeftTriggerAxis() != 0).whileTrue(new IntakeConsume(m_Intake));
+        //intake until has game piece
+        new Trigger(()-> m_operatorController.getLeftBumper()).whileTrue(new AutoIntake(m_Intake));
+        //Shooter fire
+        new Trigger(()-> m_operatorController.getRightTriggerAxis() != 0).whileTrue(new ShooterEject(m_Shooter));
+
+        //Amp Eject
+        new Trigger(()-> m_operatorController.getPOV(0) == 0).whileTrue(
+          new AmpScore(m_Shooter, m_Intake))
+              .onFalse(
+                new RunCommand(()->m_Shooter.setOutSpeeds(0), m_Shooter).alongWith(
+                new RunCommand(()-> m_Intake.setOutSpeeds(0), m_Intake)));
+      
+    //Amp position
+    new Trigger(()-> m_operatorController.getYButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kAmpPosition));
+    //Pick up position
+    new Trigger(()-> m_operatorController.getAButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kPickUpPosition));
+    //Score position
+    new Trigger(()-> m_operatorController.getBButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kSpeakerPosition));
+    //Stage position
+    new Trigger(()-> m_operatorController.getXButton()).onTrue(new ClosedLoopArm(m_Arm, PositionConstants.kStageShot));
+    //Non driver controlled actions
+        //disables the PID on the arm when you hit disable
+        new Trigger(()-> DriverStation.isDisabled()).onTrue(new RunCommand(()-> {m_Arm.disable(); m_Arm.setMotorOutputs(0);}, m_Arm));
+
+    
+
+
+
+
 
 
     

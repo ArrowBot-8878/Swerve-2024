@@ -30,11 +30,28 @@ public class Autos {
     autoTab.add(autoChooser);
     m_commandMap = new HashMap<>(); //the command map is where the auto are stored on a table
 
-    autoChooser.addOption("2PieceAmplifier", "2PieceAmplifier");
-    autoChooser.addOption("2PieceAmplifierCenter", "2PieceAmplifierCenter");
+    autoChooser.addOption("OpenSide", "OpenSide");
+    autoChooser.addOption("AmpSide", "AmpSide");
+    autoChooser.addOption("ShootAndSit", "ShootAndSit");
+    autoChooser.addOption("FourFast", "FourFast");
+    autoChooser.addOption("AmpSide3", "AmpSide3");
+    autoChooser.addOption("AmpSide2", "AmpSide2");
+    autoChooser.addOption("3NoteStage", "3NoteStage");
+    autoChooser.addOption("Source_N_Mobility", "Source_N_Mobility");
+    autoChooser.addOption("3PeiceStage", "3PeiceStage");
 
-    m_commandMap.put("2PieceAmplifier", new PathPlannerAuto("2PieceAmplifier"));
-    m_commandMap.put("2PieceAmplifierCenter", new PathPlannerAuto("2PieceAmplifierCenter"));
+
+
+    m_commandMap.put("OpenSide", new PathPlannerAuto("OpenSide"));
+    m_commandMap.put("AmpSide", new PathPlannerAuto("AmpSide"));
+    m_commandMap.put("ShootAndSit", new PathPlannerAuto("ShootAndSit"));
+    m_commandMap.put("FourFast", new PathPlannerAuto("FourFast"));
+    m_commandMap.put("AmpSide3", new PathPlannerAuto("AmpSide3"));
+    m_commandMap.put("AmpSide2", new PathPlannerAuto("AmpSide2"));
+    m_commandMap.put("3NoteStage", new PathPlannerAuto("3NoteStage"));
+    m_commandMap.put("Source_N_Mobility", new PathPlannerAuto("Source_N_Mobility"));
+    m_commandMap.put("3PeiceStage", new PathPlannerAuto("3PeiceStage"));
+    
   }
 
 

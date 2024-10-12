@@ -2,20 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Commands;
+package frc.robot.Commands.AutoCommands;
+
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.Intake;
 
-public class ShooterDump extends Command {
+public class IntakeConsumeAuto extends Command {
   /** Creates a new IntakeConsume. */
-
-  private final Shooter m_intake;
-  public ShooterDump(Shooter m_intake) {
+  private final Intake m_intake;
+  private DoubleSupplier m_SpeedSupplier;
+  public IntakeConsumeAuto(Intake m_intake, DoubleSupplier m_SpeedSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_intake = m_intake;
-    addRequirements(m_intake); 
+    this.m_SpeedSupplier = m_SpeedSupplier;
+    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +29,7 @@ public class ShooterDump extends Command {
   @Override
   public void execute() 
   {
-    m_intake.setOutSpeeds(-ShooterConstants.ShooterSpeedScalar);
+    m_intake.setOutSpeeds(IntakeConstants.kIntakeScalingFactor);
   }
 
   // Called once the command ends or is interrupted.
