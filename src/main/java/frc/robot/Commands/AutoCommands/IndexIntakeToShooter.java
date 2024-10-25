@@ -11,8 +11,12 @@ import frc.robot.subsystems.Intake;
 public class IndexIntakeToShooter extends Command {
   /** Creates a new IntakeConsume. */
   private final Intake m_intake;
-  public IndexIntakeToShooter(Intake m_intake) {
+
+  private double m_output;
+
+  public IndexIntakeToShooter(Intake m_intake, double m_output) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.m_output = m_output;
     this.m_intake = m_intake;
     addRequirements(m_intake);
   }

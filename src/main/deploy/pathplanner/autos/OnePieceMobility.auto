@@ -2,54 +2,61 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6526466320503541,
-      "y": 4.532947561579464
+      "x": 0.7509152340242001,
+      "y": 4.455472842569617
     },
-    "rotation": 0
+    "rotation": -59.0149085602754
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShooterFireFast"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SetIntakeGround"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "deadline",
                 "data": {
-                  "waitTime": 0.9
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterFireFast"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ArmToSpeaker"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "deadline",
                 "data": {
-                  "name": "IndexIntakeToShooter"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.9
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IndexIntakeToShooter"
+                      }
+                    }
+                  ]
                 }
               }
             ]

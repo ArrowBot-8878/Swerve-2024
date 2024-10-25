@@ -87,6 +87,23 @@
           ]
         }
       }
+    },
+    {
+      "name": "prep",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ArmToSpeaker"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

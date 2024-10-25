@@ -93,8 +93,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShooterFire", new ShooterFire(m_Shooter, ()-> 0.5));
         NamedCommands.registerCommand("ShooterFireFast", new ShooterFire(m_Shooter, ()-> 1.0));
         NamedCommands.registerCommand("ShooterRescind", new ShooterRescind(m_Shooter, ()-> 0.2));
-        NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake));
-        NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake));
+        NamedCommands.registerCommand("IndexIntakeToShooter", new IndexIntakeToShooter(m_Intake, 0.2));
+        NamedCommands.registerCommand("IndexShooterToIntake", new IndexIntakeToShooter(m_Intake, -0.2));
         NamedCommands.registerCommand("IntakeConsume", new IntakeConsumeAuto(m_Intake, ()-> 0.5));
         NamedCommands.registerCommand("AutoIntake", new AutoIntakeStronger(m_Intake));
         NamedCommands.registerCommand("IntakeDump", new IntakeEject(m_Intake));
