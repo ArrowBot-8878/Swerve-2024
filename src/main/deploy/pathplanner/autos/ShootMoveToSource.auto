@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.0155294729194118,
+      "x": 0.765872873427322,
       "y": 4.449761743888425
     },
-    "rotation": 0
+    "rotation": -60.068488159492176
   },
   "command": {
     "type": "sequential",
@@ -84,37 +84,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SpeakerToCenter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CenterToSpeaker"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SpeakerToLeftNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftNoteToSpeaker"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SpeakerToRightNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightNoteToSpeaker"
+            "pathName": "MoveToSource"
           }
         }
       ]

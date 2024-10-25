@@ -39,7 +39,7 @@ public class Autos {
     autoChooser.addOption("3NoteStage", "3NoteStage");
     autoChooser.addOption("Source_N_Mobility", "Source_N_Mobility");
     autoChooser.addOption("3PeiceStage", "3PeiceStage");
-
+    autoChooser.addOption("ShootMoveToSource", "ShootMoveToSource");
 
 
     m_commandMap.put("OpenSide", new PathPlannerAuto("OpenSide"));
@@ -51,7 +51,7 @@ public class Autos {
     m_commandMap.put("3NoteStage", new PathPlannerAuto("3NoteStage"));
     m_commandMap.put("Source_N_Mobility", new PathPlannerAuto("Source_N_Mobility"));
     m_commandMap.put("3PeiceStage", new PathPlannerAuto("3PeiceStage"));
-    
+    m_commandMap.put("ShootMoveToSource", new PathPlannerAuto("ShootMoveToSource"));
   }
 
 
