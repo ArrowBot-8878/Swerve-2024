@@ -22,7 +22,7 @@ public class Climb extends SubsystemBase {
   }
 
   public void setMotorOutput(double leftOutput, double rightOutput){
-    m_LeftClimbMotor.set(leftOutput);
+    m_LeftClimbMotor.set(-leftOutput);
     m_RightClimbMotor.set(rightOutput);
   }
 
